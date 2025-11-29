@@ -35,7 +35,7 @@
           <a href="about.html">About</a>
           <a href="contact.html" class="active">Contact</a>
         </nav>
-        <a class="btn btn-outline-light btn-sm rounded-pill" href="contact.html">Get Proposal</a>
+        <a class="btn btn-get-proposal btn-sm" href="contact.html">Get Proposal</a>
         <button class="nav-toggle d-lg-none" id="navToggle" aria-label="Toggle navigation">
           <span></span>
           <span></span>
@@ -52,35 +52,62 @@
     <main class="container py-5 contact-page simple-contact">
       <section class="text-center mb-5">
         <p class="eyebrow text-uppercase">Contact us</p>
-        <h1 class="fw-bold text-gradient mb-3">Let’s talk about growth.</h1>
+        <h1 class="fw-bold text-gradient mb-3">Let's talk about growth.</h1>
         <p class="text-muted col-lg-8 mx-auto">
           Send a quick brief and drop a pin—our team replies with a tailored roadmap within one business day.
         </p>
+        <div class="price-selector mt-4">
+          <label for="currencySelector" class="price-selector-label">See prices for</label>
+          <select id="currencySelector" class="form-select form-select-sm">
+            <option value="usa">United States • USD ($)</option>
+            <option value="india">India • INR (₹)</option>
+            <option value="canada">Canada • CAD (C$)</option>
+            <option value="australia">Australia • AUD (A$)</option>
+          </select>
+        </div>
       </section>
 
       <section class="row g-4 align-items-stretch mb-5">
-        <div class="col-lg-6">
+        <div class="col-lg-8 mx-auto">
           <form class="contact-form glass-panel" id="contactForm" novalidate>
             <div class="row g-3">
               <div class="col-md-6">
                 <label class="form-label text-uppercase small" for="contactName">Full name</label>
-                <input type="text" class="form-control" id="contactName" name="fullName" required />
+                <input type="text" class="form-control" id="contactName" name="fullName" placeholder="John Doe" required />
                 <div class="invalid-feedback">Please enter your full name.</div>
               </div>
               <div class="col-md-6">
                 <label class="form-label text-uppercase small" for="contactCompany">Company</label>
-                <input type="text" class="form-control" id="contactCompany" name="company" required />
+                <input type="text" class="form-control" id="contactCompany" name="company" placeholder="Your Company Name" required />
                 <div class="invalid-feedback">Let us know the company you represent.</div>
               </div>
               <div class="col-md-6">
                 <label class="form-label text-uppercase small" for="contactEmail">Email</label>
-                <input type="email" class="form-control" id="contactEmail" name="email" required />
+                <input type="email" class="form-control" id="contactEmail" name="email" placeholder="john@company.com" required />
                 <div class="invalid-feedback">A valid email helps us reply quickly.</div>
               </div>
               <div class="col-md-6">
                 <label class="form-label text-uppercase small" for="contactPhone">Phone</label>
                 <input type="tel" class="form-control" id="contactPhone" name="phone" placeholder="+1 555 000 0000" />
                 <div class="invalid-feedback">Please use digits only (min 7, max 15).</div>
+              </div>
+              <div class="col-12">
+                <label class="form-label text-uppercase small" for="packageSelector">Choose Package</label>
+                <select class="form-select" id="packageSelector" name="package" required>
+                  <option value="">Select a package...</option>
+                  <option value="golden-package">Golden Package - $2,500/month</option>
+                  <option value="premium-package">Premium Package - $5,800/month</option>
+                  <option value="meta-ads-package">Meta Ads Package - $10,900/month</option>
+                </select>
+                <div class="invalid-feedback">Please select a package.</div>
+              </div>
+              <div class="col-12" id="packageDetailsSection" style="display: none;">
+                <div class="package-details-preview glass-panel mb-3" style="background: rgba(125, 211, 252, 0.1); border-color: rgba(125, 211, 252, 0.3);">
+                  <p class="text-uppercase small mb-2" style="color: var(--primary); letter-spacing: 0.1em; font-weight: 600;">Selected Package</p>
+                  <h5 id="selectedPackageName" class="mb-2" style="color: #fff; font-weight: 600;"></h5>
+                  <p class="text-muted small mb-2" id="selectedPackagePrice" style="color: rgba(255, 255, 255, 0.7);"></p>
+                  <ul class="package-features-preview mb-0" id="selectedPackageFeatures" style="list-style: none; padding-left: 0; font-size: 0.9rem;"></ul>
+                </div>
               </div>
               <div class="col-12">
                 <label class="form-label text-uppercase small" for="contactMessage">Message</label>
@@ -102,24 +129,6 @@
             </div>
           </form>
           <div class="contact-toast" id="contactToast" role="alert" aria-live="polite"></div>
-        </div>
-        <div class="col-lg-6">
-          <div class="map-card glass-panel h-100 d-flex flex-column">
-            <iframe
-              title="Gravitric"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3672.20847343055!2d72.537272!3d23.0801678!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x49dca0b2531c457b%3A0x98b889d66800c73f!2sKDN%20Creative%20Solutions!5e0!3m2!1sen!2sin!4v1700000000000"
-              allowfullscreen=""
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-            ></iframe>
-            <div class="logo-strip mt-3">
-              <span>Meta</span>
-              <span>Google</span>
-              <span>HubSpot</span>
-              <span>Shopify</span>
-              <span>Notion</span>
-            </div>
-          </div>
         </div>
       </section>
     </main>
@@ -179,7 +188,7 @@
           </div>
         </div>
         <div class="footer-bottom">
-          <small>© <span id="year"></span> Gravitric. All Rights Reserved.</small>
+          <small>© <span id="year"></span> KDN Creative Solutions. All Rights Reserved.</small>
           <!-- <div class="footer-payments">
             <span>Visa</span>
             <span>UPI</span>
