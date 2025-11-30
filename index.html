@@ -146,7 +146,7 @@
                 </div>
               </div>
               <div class="hero-chart-grid">
-                <svg viewBox="0 0 320 180" role="img" aria-label="Growth line chart">
+                <svg viewBox="0 0 340 180" role="img" aria-label="Growth line chart" id="growthChart" style="overflow: visible;">
                   <defs>
                     <linearGradient id="chartLine" x1="0%" y1="0%" x2="100%" y2="0%">
                       <stop offset="0%" stop-color="#c084fc" />
@@ -172,37 +172,35 @@
                   </g>
                   <path
                     class="chart-fill"
-                    d="M0 140 L0 110 L60 80 L110 90 L160 60 L210 90 L260 40 L320 30 L320 140 Z"
+                    d="M0 140 L107 100 L214 70 L320 50 L320 140 Z"
                   ></path>
                   <path
                     class="chart-line"
-                    d="M0 110 L60 80 L110 90 L160 60 L210 90 L260 40 L320 30"
+                    d="M0 140 L107 100 L214 70 L320 50"
                   ></path>
                   <g class="chart-points">
-                    <circle cx="0" cy="110" r="4" />
-                    <circle cx="60" cy="80" r="4" />
-                    <circle cx="110" cy="90" r="4" />
-                    <circle cx="160" cy="60" r="4" />
-                    <circle cx="210" cy="90" r="4" />
-                    <circle cx="260" cy="40" r="4" />
-                    <circle cx="320" cy="30" r="4" />
+                    <circle cx="0" cy="140" r="5" class="chart-point" data-year="2022" data-value="+45%" data-absolute="45" />
+                    <circle cx="107" cy="100" r="5" class="chart-point" data-year="2023" data-value="+68%" data-absolute="68" />
+                    <circle cx="214" cy="70" r="5" class="chart-point" data-year="2024" data-value="+92%" data-absolute="92" />
+                    <circle cx="320" cy="50" r="5" class="chart-point" data-year="2025" data-value="+134%" data-absolute="134" />
                   </g>
                   <g class="chart-axis-labels">
-                    <text x="0" y="160">2017</text>
-                    <text x="50" y="160">2018</text>
-                    <text x="100" y="160">2019</text>
-                    <text x="150" y="160">2020</text>
-                    <text x="200" y="160">2021</text>
-                    <text x="250" y="160">2022</text>
-                    <text x="300" y="160">2023</text>
-                    <text x="310" y="30" class="axis-y-label">+70%</text>
+                    <text x="0" y="160" text-anchor="start">2022</text>
+                    <text x="107" y="160" text-anchor="middle">2023</text>
+                    <text x="214" y="160" text-anchor="middle">2024</text>
+                    <text x="320" y="160" text-anchor="end">2025</text>
+                    <text x="310" y="50" class="axis-y-label">+134%</text>
                   </g>
                 </svg>
+                <div class="chart-tooltip" id="chartTooltip" style="display: none;">
+                  <div class="tooltip-year"></div>
+                  <div class="tooltip-value"></div>
+                </div>
               </div>
               <div class="hero-chart-meta">
                 <div>
                   <span class="legend-dot"></span>
-                  2017–2024 actuals
+                  2022–2025 forecast
                 </div>
                 <div class="hero-chart-tag">Forecast-ready CX pods</div>
               </div>

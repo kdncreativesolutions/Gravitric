@@ -170,6 +170,7 @@ main > section.marquee {
 .hero-chart-panel {
   padding: 2.5rem;
   min-height: 420px;
+  overflow: visible;
 }
 
 .hero-chart-heading {
@@ -202,6 +203,7 @@ main > section.marquee {
   position: relative;
   margin-top: 1.75rem;
   z-index: 1;
+  overflow: visible;
 }
 
 .hero-chart-grid svg {
@@ -221,6 +223,7 @@ main > section.marquee {
   fill: rgba(255, 255, 255, 0.6);
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  text-anchor: middle;
 }
 
 .chart-axis-labels .axis-y-label {
@@ -249,6 +252,51 @@ main > section.marquee {
   fill: #05070d;
   stroke: #67e8f9;
   stroke-width: 3;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.chart-points circle:hover {
+  r: 7;
+  stroke-width: 4;
+  filter: drop-shadow(0 0 8px rgba(103, 232, 249, 0.8));
+}
+
+.chart-tooltip {
+  position: absolute;
+  background: rgba(10, 15, 25, 0.98);
+  border: 1px solid rgba(125, 211, 252, 0.5);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  pointer-events: none;
+  z-index: 1000;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 20px rgba(125, 211, 252, 0.2);
+  backdrop-filter: blur(10px);
+  min-width: 120px;
+  white-space: nowrap;
+  transform: translate(-50%, 0);
+  overflow: visible;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.chart-tooltip.show {
+  opacity: 1;
+}
+
+.tooltip-year {
+  font-size: 0.75rem;
+  color: var(--primary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.25rem;
+}
+
+.tooltip-value {
+  font-size: 1.1rem;
+  color: #fff;
+  font-weight: 700;
 }
 
 .hero-chart-meta {

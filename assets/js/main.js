@@ -412,5 +412,103 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   });
+
+  // Interactive Chart with Hover Tooltips
+  const chartPoints = document.querySelectorAll('.chart-point');
+  const chartTooltip = document.querySelector('#chartTooltip');
+  const chartContainer = document.querySelector('.hero-chart-grid');
+
+  if (chartPoints.length && chartTooltip && chartContainer) {
+    chartPoints.forEach((point) => {
+      point.addEventListener('mouseenter', (e) => {
+        const year = point.getAttribute('data-year');
+        const value = point.getAttribute('data-value');
+        
+        const tooltipYear = chartTooltip.querySelector('.tooltip-year');
+        const tooltipValue = chartTooltip.querySelector('.tooltip-value');
+        
+        if (tooltipYear && tooltipValue) {
+          tooltipYear.textContent = year;
+          tooltipValue.textContent = value;
+        }
+        
+        chartTooltip.style.display = 'block';
+        updateTooltipPosition(point, chartTooltip, chartContainer);
+        // Add show class for fade-in effect
+        setTimeout(() => {
+          chartTooltip.classList.add('show');
+        }, 10);
+      });
+      
+      point.addEventListener('mouseleave', () => {
+        chartTooltip.classList.remove('show');
+        setTimeout(() => {
+          chartTooltip.style.display = 'none';
+        }, 200);
+      });
+      
+      point.addEventListener('mousemove', () => {
+        updateTooltipPosition(point, chartTooltip, chartContainer);
+      });
+    });
+    
+    function updateTooltipPosition(point, tooltip, container) {
+      const svg = point.closest('svg');
+      if (!svg) return;
+      
+      const containerRect = container.getBoundingClientRect();
+      const svgRect = svg.getBoundingClientRect();
+      const viewBox = svg.viewBox.baseVal;
+      
+      const cx = parseFloat(point.getAttribute('cx'));
+      const cy = parseFloat(point.getAttribute('cy'));
+      
+      // Convert SVG coordinates to pixel coordinates
+      const scaleX = svgRect.width / viewBox.width;
+      const scaleY = svgRect.height / viewBox.height;
+      
+      let x = (cx * scaleX) + (svgRect.left - containerRect.left);
+      let y = (cy * scaleY) + (svgRect.top - containerRect.top);
+      
+      // Get tooltip dimensions to prevent overflow
+      tooltip.style.visibility = 'hidden';
+      tooltip.style.display = 'block';
+      const tooltipRect = tooltip.getBoundingClientRect();
+      tooltip.style.visibility = 'visible';
+      
+      // Adjust position to keep tooltip within container bounds
+      const tooltipWidth = tooltipRect.width;
+      const tooltipHeight = tooltipRect.height;
+      const containerWidth = containerRect.width;
+      const containerHeight = containerRect.height;
+      
+      // Center horizontally above the point
+      let tooltipX = x;
+      
+      // Adjust if tooltip would overflow left edge
+      if (tooltipX - tooltipWidth / 2 < 10) {
+        tooltipX = tooltipWidth / 2 + 10;
+      }
+      // Adjust if tooltip would overflow right edge
+      else if (tooltipX + tooltipWidth / 2 > containerWidth - 10) {
+        tooltipX = containerWidth - tooltipWidth / 2 - 10;
+      }
+      
+      // Position tooltip above the point with better spacing
+      let tooltipY = y - tooltipHeight - 20;
+      
+      // If tooltip would go above container, position below instead
+      if (tooltipY < 10) {
+        tooltipY = y + 25;
+      }
+      // If tooltip would go below container, position above
+      else if (tooltipY + tooltipHeight > containerHeight - 10) {
+        tooltipY = y - tooltipHeight - 20;
+      }
+      
+      tooltip.style.left = `${tooltipX}px`;
+      tooltip.style.top = `${tooltipY}px`;
+    }
+  }
 });
 
