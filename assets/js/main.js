@@ -85,14 +85,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Get or set currency preference
   const getCurrencyPreference = () => {
-    return localStorage.getItem('selectedCurrency') || 'usa';
+    return localStorage.getItem('selectedCurrency') || null;
   };
 
   const setCurrencyPreference = (region) => {
-    localStorage.setItem('selectedCurrency', region);
+    if (region) {
+      localStorage.setItem('selectedCurrency', region);
+    } else {
+      localStorage.removeItem('selectedCurrency');
+    }
   };
 
   const updatePrices = (region) => {
+    if (!region) return; // Don't update if no region selected
     const config = currencyConfig[region] || currencyConfig.usa;
     priceAmounts.forEach((priceEl) => {
       const base = Number(priceEl.dataset.basePrice) || 0;
@@ -104,13 +109,25 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   if (currencySelector && priceAmounts.length) {
-    // Load saved currency preference
+    // Load saved currency preference only if it exists
     const savedCurrency = getCurrencyPreference();
-    currencySelector.value = savedCurrency;
-    updatePrices(savedCurrency);
+    if (savedCurrency && currencyConfig[savedCurrency]) {
+      currencySelector.value = savedCurrency;
+      updatePrices(savedCurrency);
+    }
     
     currencySelector.addEventListener('change', (event) => {
-      updatePrices(event.target.value);
+      const selectedValue = event.target.value;
+      if (selectedValue) {
+        updatePrices(selectedValue);
+      } else {
+        // Reset to base prices if "Select" is chosen
+        setCurrencyPreference(null);
+        priceAmounts.forEach((priceEl) => {
+          const base = Number(priceEl.dataset.basePrice) || 0;
+          priceEl.textContent = formatPrice(base, currencyConfig.usa);
+        });
+      }
     });
   }
 
@@ -285,11 +302,16 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Auto-populate message field with package info
+    // Auto-populate or update message field with package info
     const messageField = document.querySelector('#contactMessage');
-    if (messageField && !messageField.value.trim()) {
+    if (messageField) {
       const formattedPrice = getFormattedPrice(packageKey);
-      messageField.value = `I'm interested in the ${package.name} package (${formattedPrice}). Please provide more details.`;
+      const messageText = `I'm interested in the ${package.name} package (${formattedPrice}). Please provide more details.`;
+      
+      // If message is empty or contains package info, update it
+      if (!messageField.value.trim() || messageField.value.includes('interested in the')) {
+        messageField.value = messageText;
+      }
     }
 
     // Update package selector if it exists
@@ -304,7 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!packageSelector) return;
 
     const selectedCurrency = getCurrencyPreference();
-    const config = currencyConfig[selectedCurrency] || currencyConfig.usa;
+    const config = (selectedCurrency && currencyConfig[selectedCurrency]) ? currencyConfig[selectedCurrency] : currencyConfig.usa;
 
     // Update dropdown option texts
     const options = packageSelector.querySelectorAll('option');
@@ -323,22 +345,37 @@ document.addEventListener('DOMContentLoaded', () => {
   // Update contact form prices on page load
   updateContactFormPrices();
 
-  // Listen for currency changes (if currency selector exists on contact page)
-  const contactCurrencySelector = document.querySelector('#currencySelector');
-  if (contactCurrencySelector && !currencySelector) {
-    // This is the contact page currency selector
-    const savedCurrency = getCurrencyPreference();
-    contactCurrencySelector.value = savedCurrency;
-    contactCurrencySelector.addEventListener('change', (event) => {
-      const selectedCurrency = event.target.value;
-      setCurrencyPreference(selectedCurrency);
-      updateContactFormPrices();
-      // Refresh package details if one is selected
-      const packageSelector = document.querySelector('#packageSelector');
-      if (packageSelector && packageSelector.value) {
-        displayPackageDetails(packageSelector.value);
+  // Listen for currency changes on contact page (if package selector exists, we're on contact page)
+  const packageSelector = document.querySelector('#packageSelector');
+  if (packageSelector) {
+    // This is the contact page
+    const contactCurrencySelector = document.querySelector('#currencySelector');
+    if (contactCurrencySelector) {
+      const savedCurrency = getCurrencyPreference();
+      if (savedCurrency && currencyConfig[savedCurrency]) {
+        contactCurrencySelector.value = savedCurrency;
       }
-    });
+      
+      contactCurrencySelector.addEventListener('change', (event) => {
+        const selectedCurrency = event.target.value;
+        if (selectedCurrency) {
+          setCurrencyPreference(selectedCurrency);
+          updateContactFormPrices();
+          // Refresh package details if one is selected to update the displayed price and message
+          if (packageSelector.value) {
+            // Force update by calling displayPackageDetails which will update price preview and message
+            displayPackageDetails(packageSelector.value);
+          }
+        } else {
+          setCurrencyPreference(null);
+          updateContactFormPrices();
+          // If a package is selected, refresh it to show base USD price
+          if (packageSelector.value) {
+            displayPackageDetails(packageSelector.value);
+          }
+        }
+      });
+    }
   }
 
   // Handle package selection from URL parameters
@@ -348,8 +385,7 @@ document.addEventListener('DOMContentLoaded', () => {
     displayPackageDetails(selectedPackage);
   }
 
-  // Handle manual package selection from dropdown
-  const packageSelector = document.querySelector('#packageSelector');
+  // Handle manual package selection from dropdown (reuse packageSelector from above if on contact page)
   if (packageSelector) {
     packageSelector.addEventListener('change', (event) => {
       const selectedValue = event.target.value;
@@ -370,9 +406,9 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('storage', (event) => {
     if (event.key === 'selectedCurrency') {
       updateContactFormPrices();
-      const packageSelector = document.querySelector('#packageSelector');
-      if (packageSelector && packageSelector.value) {
-        displayPackageDetails(packageSelector.value);
+      const packageSelectorForStorage = document.querySelector('#packageSelector');
+      if (packageSelectorForStorage && packageSelectorForStorage.value) {
+        displayPackageDetails(packageSelectorForStorage.value);
       }
     }
   });

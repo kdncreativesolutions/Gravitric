@@ -26,6 +26,14 @@ body {
 main > section {
   max-width: 1200px;
   margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 1400px) {
+  main > section {
+    max-width: 1320px;
+    padding-inline: 1.5rem;
+  }
 }
 
 main > section.marquee {
@@ -73,6 +81,14 @@ main > section.marquee {
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 1400px) {
+  .site-header .container {
+    max-width: 1320px;
+    padding-inline: 1.5rem;
+  }
 }
 
 .brand-logo {
@@ -306,6 +322,7 @@ main > section.marquee {
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-width: 0;
 }
 
 .counter-wrapper {
@@ -338,6 +355,9 @@ main > section.marquee {
 .hero-metrics .text-muted {
   margin-top: 0.5rem;
   margin-bottom: 0;
+  width: 100%;
+  text-align: center;
+  white-space: nowrap;
 }
 
 .card-tile {
@@ -346,6 +366,8 @@ main > section.marquee {
   border: 1px solid rgba(255, 255, 255, 0.07);
   padding: 2rem;
   transition: transform 0.4s ease, border-color 0.4s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .card-tile:hover {
@@ -355,29 +377,48 @@ main > section.marquee {
 
 .about-pillars {
   align-items: stretch;
-  justify-content: center;
-  gap: 1.5rem;
-  padding-left: 4.5rem;
 }
 
 .about-pillars > [class*='col-'] {
   display: flex;
-  max-width: 360px;
 }
 
 .about-pillars .card-tile {
   flex: 1;
+  width: 100%;
 }
 
+/* Medium screens (tablets and small laptops) */
+@media (max-width: 1199px) and (min-width: 993px) {
+  .about-pillars {
+    gap: 1.25rem;
+    flex-wrap: nowrap;
+  }
+  
+  .about-pillars .card-tile {
+    padding: 1.75rem;
+  }
+}
+
+/* Small screens (tablets) - keep 3 in a row if possible */
+@media (max-width: 992px) and (min-width: 769px) {
+  .about-pillars .card-tile {
+    padding: 1.5rem;
+  }
+}
+
+/* Small screens (mobile) */
 @media (max-width: 768px) {
   .about-pillars {
-    padding-left: 0;
+    flex-direction: column;
     justify-content: center;
     gap: 1rem;
   }
 
   .about-pillars > [class*='col-'] {
     display: block;
+    width: 100%;
+    flex: 0 0 100%;
     max-width: 100%;
   }
 
@@ -536,17 +577,17 @@ main > section.marquee {
 
 .package-badge {
   position: absolute;
-  top: 1rem;
+  top: 0.75rem;
   right: 1rem;
   background: linear-gradient(120deg, #c084fc, #7dd3fc);
   color: #05070d;
-  padding: 0.4rem 0.9rem;
+  padding: 0.3rem 0.75rem;
   border-radius: 999px;
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  z-index: 10;
+  z-index: 1;
   box-shadow: 0 4px 12px rgba(125, 211, 252, 0.4);
 }
 
@@ -1037,6 +1078,16 @@ main > section.marquee {
   color: var(--muted);
 }
 
+.footer-bottom a {
+  color: var(--primary) !important;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-bottom a:hover {
+  color: var(--accent) !important;
+}
+
 .footer-payments {
   display: flex;
   gap: 0.75rem;
@@ -1092,6 +1143,23 @@ main > section.marquee {
 .btn-get-proposal:active {
   transform: translateY(0);
   box-shadow: 0 4px 12px rgba(125, 211, 252, 0.3);
+}
+
+/* Mobile styles for Get Proposal button */
+@media (max-width: 768px) {
+  .btn-get-proposal {
+    padding: 0.4rem 1rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.03em;
+  }
+}
+
+@media (max-width: 576px) {
+  .btn-get-proposal {
+    padding: 0.35rem 0.85rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.02em;
+  }
 }
 
 /* Package Details Preview */
@@ -1251,6 +1319,28 @@ main > section.marquee {
   justify-content: center;
 }
 
+/* Laptop sizes (14" and 15.6") - 1366px to 1440px */
+@media (max-width: 1440px) and (min-width: 1200px) {
+  .about-pillars {
+    gap: -0.75rem;
+  }
+  
+  .card-tile {
+    padding: 1.75rem;
+  }
+}
+
+/* Tablets and small laptops */
+@media (max-width: 1199px) and (min-width: 993px) {
+  .about-pillars {
+    gap: 1rem;
+  }
+  
+  .card-tile {
+    padding: 1.5rem;
+  }
+}
+
 @media (max-width: 992px) {
   .hero-metrics {
     flex-direction: column;
@@ -1266,6 +1356,10 @@ main > section.marquee {
 
   .styled-list.dual {
     columns: 1;
+  }
+  
+  .about-pillars {
+    gap: 1rem;
   }
 }
 
