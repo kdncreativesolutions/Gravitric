@@ -1229,15 +1229,17 @@ main > section.marquee {
   font-size: 0.8rem;
 }
 
-/* Get Proposal Button - Unique Design */
+/* Get Proposal Button - Glass Morphism Design */
 .btn-get-proposal {
   position: relative;
   padding: 0.5rem 1.5rem;
   border-radius: 999px;
-  background: linear-gradient(120deg, rgba(192, 132, 252, 0.4), rgba(125, 211, 252, 0.4), rgba(103, 232, 249, 0.4));
-  backdrop-filter: blur(10px) saturate(180%);
-  -webkit-backdrop-filter: blur(10px) saturate(180%);
-  border: 1.5px solid rgba(125, 211, 252, 0.3);
+  background: rgba(10, 15, 25, 0.4);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   color: #fff;
   font-weight: 600;
   letter-spacing: 0.05em;
@@ -1246,7 +1248,32 @@ main > section.marquee {
   overflow: hidden;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(125, 211, 252, 0.1);
+}
+
+.btn-get-proposal > * {
+  position: relative;
+  z-index: 2;
+}
+
+.btn-get-proposal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.1), 
+    transparent
+  );
+  transition: left 0.5s ease;
+  z-index: 1;
 }
 
 .btn-get-proposal::after {
@@ -1254,28 +1281,48 @@ main > section.marquee {
   position: absolute;
   inset: 0;
   border-radius: 999px;
-  padding: 1.5px;
-  background: linear-gradient(120deg, #c084fc, #7dd3fc, #67e8f9);
+  padding: 1px;
+  background: linear-gradient(120deg, 
+    rgba(192, 132, 252, 0.3), 
+    rgba(125, 211, 252, 0.3), 
+    rgba(103, 232, 249, 0.3)
+  );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   opacity: 1;
   z-index: -1;
+  pointer-events: none;
 }
 
 .btn-get-proposal:hover {
-  background: linear-gradient(120deg, rgba(192, 132, 252, 0.5), rgba(125, 211, 252, 0.5), rgba(103, 232, 249, 0.5));
-  backdrop-filter: blur(12px) saturate(200%);
-  -webkit-backdrop-filter: blur(12px) saturate(200%);
-  border-color: rgba(125, 211, 252, 0.5);
+  background: rgba(10, 15, 25, 0.5);
+  backdrop-filter: blur(25px) saturate(200%);
+  -webkit-backdrop-filter: blur(25px) saturate(200%);
+  border-color: rgba(125, 211, 252, 0.4);
+  border-top-color: rgba(125, 211, 252, 0.5);
   color: #fff;
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(125, 211, 252, 0.4), 0 0 20px rgba(192, 132, 252, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    0 12px 40px rgba(125, 211, 252, 0.3),
+    0 0 30px rgba(192, 132, 252, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(125, 211, 252, 0.2);
+}
+
+.btn-get-proposal:hover::before {
+  left: 100%;
 }
 
 .btn-get-proposal:active {
   transform: translateY(0);
-  box-shadow: 0 4px 12px rgba(125, 211, 252, 0.3);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: 
+    0 4px 16px rgba(125, 211, 252, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
 }
 
 /* Mobile styles for Get Proposal button */
