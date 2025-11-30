@@ -594,6 +594,12 @@ main > section.marquee {
 .contact-form .form-feedback {
   min-height: 20px;
   color: var(--primary);
+  transition: color 0.3s ease;
+}
+
+.contact-form button[type="submit"]:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 .contact-toast {
