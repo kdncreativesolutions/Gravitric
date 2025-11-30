@@ -566,5 +566,45 @@ document.addEventListener('DOMContentLoaded', () => {
       tooltip.style.top = `${tooltipY}px`;
     }
   }
+
+  // WhatsApp Popup Functionality
+  const whatsappFloat = document.querySelector('#whatsappFloat');
+  const whatsappPopup = document.querySelector('#whatsappPopup');
+  const whatsappPopupClose = document.querySelector('#whatsappPopupClose');
+
+  if (whatsappFloat && whatsappPopup) {
+    let popupClickHandler = null;
+
+    // Toggle popup on button click
+    whatsappFloat.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      whatsappPopup.classList.toggle('show');
+    });
+
+    // Close popup on close button click
+    if (whatsappPopupClose) {
+      whatsappPopupClose.addEventListener('click', (e) => {
+        e.stopPropagation();
+        whatsappPopup.classList.remove('show');
+      });
+    }
+
+    // Close popup when clicking outside
+    popupClickHandler = (e) => {
+      const container = document.querySelector('.whatsapp-popup-container');
+      if (container && !container.contains(e.target) && whatsappPopup.classList.contains('show')) {
+        whatsappPopup.classList.remove('show');
+      }
+    };
+    document.addEventListener('click', popupClickHandler);
+
+    // Close popup on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && whatsappPopup.classList.contains('show')) {
+        whatsappPopup.classList.remove('show');
+      }
+    });
+  }
 });
 
