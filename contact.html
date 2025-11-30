@@ -26,8 +26,8 @@
     <div class="page-glow"></div>
     <header class="site-header container-fluid py-3">
       <div class="container d-flex align-items-center justify-content-between">
-        <a class="brand-logo fw-bold text-uppercase" href="index.html">
-          Gravitric<span></span>
+        <a class="brand-logo" href="index.html">
+          <img src="assets/img/logo.svg" alt="Gravitric" class="logo-img">
         </a>
         <nav class="main-nav d-none d-lg-flex gap-4">
           <a href="index.html">Home</a>
@@ -89,8 +89,17 @@
               </div>
               <div class="col-md-6">
                 <label class="form-label text-uppercase small" for="contactPhone">Phone</label>
-                <input type="tel" class="form-control" id="contactPhone" name="phone" placeholder="+1 555 000 0000" />
-                <div class="invalid-feedback">Please use digits only (min 7, max 15).</div>
+                <input 
+                  type="tel" 
+                  class="form-control" 
+                  id="contactPhone" 
+                  name="phone" 
+                  placeholder="+1 555 000 0000" 
+                  pattern="^[\+]?[0-9\s\-\(\)\.]{7,20}$"
+                  minlength="7"
+                  maxlength="20"
+                />
+                <div class="invalid-feedback">Please enter a valid phone number (7-20 digits, with optional +, spaces, dashes, or parentheses).</div>
               </div>
               <div class="col-12">
                 <label class="form-label text-uppercase small" for="packageSelector">Choose Package</label>
@@ -138,12 +147,11 @@
       <div class="container">
         <div class="footer-grid">
           <div class="footer-brand">
-            <a class="brand-logo fw-bold text-uppercase" href="index.html">
-              Gravitric
+            <a class="brand-logo" href="index.html">
+              <img src="assets/img/logo.svg" alt="Gravitric" class="logo-img">
             </a>
             <p>
-              Digital marketing studio delivering lead generation, Meta ads, social media handling, post creation, and calling
-              support with a Gravitrik touch.
+             A digital marketing team focused on lead generation, Meta ads, social media growth, content creation, and calling support.
             </p>
             <div class="social-links">
               <a href="https://www.instagram.com/gravitrikdigital" target="_blank" rel="noopener" aria-label="Instagram">
@@ -175,7 +183,7 @@
               <li>Lead generation pods</li>
               <li>Meta ads campaign</li>
               <li>Social media handling</li>
-              <li>Calling & CX support</li>
+              <li>Calling Support</li>
             </ul>
           </div>
           <div>
