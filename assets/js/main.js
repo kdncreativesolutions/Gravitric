@@ -1,4 +1,27 @@
+// EmailJS Configuration
+// Replace these with your EmailJS credentials
+const EMAILJS_CONFIG = {
+  PUBLIC_KEY: 'mkhP4QFB3Rh9vRcQl', // Get this from EmailJS Dashboard > Account > API Keys
+  SERVICE_ID: 'service_h590qlb', // Get this from EmailJS Dashboard > Email Services
+  TEMPLATE_ID: 'template_tqwwea3', // Get this from EmailJS Dashboard > Email Templates
+  RECEIVER_EMAIL: 'gravitric@gmail.com' // Your email where you want to receive form submissions
+};
+
+// Initialize EmailJS (will be initialized when DOM is ready)
+let emailjsInitialized = false;
+
+function initializeEmailJS() {
+  if (typeof emailjs !== 'undefined' && !emailjsInitialized) {
+    emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+    emailjsInitialized = true;
+    console.log('EmailJS initialized successfully');
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  // Initialize EmailJS when DOM is ready
+  initializeEmailJS();
+  
   const navToggle = document.querySelector('#navToggle');
   const mobileMenu = document.querySelector('#mobileMenu');
   const year = document.querySelector('#year');
@@ -196,25 +219,177 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      contactForm.reset();
-      inputs.forEach((input) => input.classList.remove('is-invalid'));
-      // Hide package details section after reset
-      const packageDetailsSection = document.querySelector('#packageDetailsSection');
-      if (packageDetailsSection) packageDetailsSection.style.display = 'none';
-
-      const successMessage = 'Thank you for submitting the form. Our team will call you shortly.';
-
+      // Disable submit button and show loading state
+      const submitButton = contactForm.querySelector('button[type="submit"]');
+      const originalButtonText = submitButton.textContent;
+      submitButton.disabled = true;
+      submitButton.textContent = 'Sending...';
+      
       if (contactFeedback) {
-        contactFeedback.textContent = successMessage;
+        contactFeedback.textContent = 'Sending your message...';
+        contactFeedback.style.color = 'var(--primary)';
       }
 
-      if (contactToast) {
-        contactToast.textContent = successMessage;
-        contactToast.classList.add('show');
-        if (toastTimer) clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => {
-          contactToast.classList.remove('show');
-        }, 5000);
+      // Get form values
+      const name = contactForm.querySelector('#contactName').value.trim();
+      const email = contactForm.querySelector('#contactEmail').value.trim();
+      const company = contactForm.querySelector('#contactCompany').value.trim();
+      const phone = contactForm.querySelector('#contactPhone').value.trim();
+      const packageValue = contactForm.querySelector('#packageSelector').value;
+      const packageName = contactForm.querySelector('#packageSelector').selectedOptions[0]?.text || 'Not selected';
+      const message = contactForm.querySelector('#contactMessage').value.trim();
+
+      // Debug: Log form data
+      console.log('Form Data:', {
+        name,
+        email,
+        company,
+        phone,
+        packageValue,
+        packageName,
+        message
+      });
+
+      // Prepare form data for EmailJS
+      // Using common EmailJS template variable names
+      const formData = {
+        // Standard EmailJS variables - These control the "from" field
+        from_name: name || 'Contact Form User', // Customer's name (shows in "from" field)
+        from_email: email, // Customer's email (used for reply-to)
+        user_name: name,
+        user_email: email,
+        reply_to: email, // Reply-to address (customer's email)
+        
+        // Custom fields
+        company: company,
+        from_company: company,
+        phone: phone,
+        from_phone: phone,
+        user_phone: phone,
+        
+        // Package information
+        package: packageValue,
+        package_name: packageName,
+        selected_package: packageName,
+        
+        // Message
+        message: message,
+        user_message: message,
+        
+        // Email configuration
+        to_email: EMAILJS_CONFIG.RECEIVER_EMAIL,
+        to_name: 'Gravitric Team',
+        
+        // Display customer email prominently
+        customer_email: email,
+        customer_name: name
+      };
+
+      // Send email using EmailJS
+      // Ensure EmailJS is initialized
+      if (!emailjsInitialized) {
+        initializeEmailJS();
+      }
+      
+      if (typeof emailjs !== 'undefined' && EMAILJS_CONFIG.PUBLIC_KEY && EMAILJS_CONFIG.PUBLIC_KEY !== 'YOUR_PUBLIC_KEY') {
+        // Debug: Log what we're sending to EmailJS
+        console.log('Sending to EmailJS:', formData);
+        
+        // Send email with customer's name in from field
+        // Note: The actual "from" email will be your service email for security,
+        // but the "from_name" will show the customer's name
+        emailjs.send(
+          EMAILJS_CONFIG.SERVICE_ID,
+          EMAILJS_CONFIG.TEMPLATE_ID,
+          formData,
+          {
+            // Public key is already initialized, but we can add additional options here if needed
+          }
+        )
+        .then((response) => {
+          // Success
+          console.log('EmailJS Success:', response);
+          const successMessage = 'Thank you for submitting the form. Our team will call you shortly.';
+          
+          if (contactFeedback) {
+            contactFeedback.textContent = successMessage;
+            contactFeedback.style.color = 'var(--primary)';
+          }
+
+          if (contactToast) {
+            contactToast.textContent = successMessage;
+            contactToast.classList.add('show');
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+              contactToast.classList.remove('show');
+            }, 5000);
+          }
+
+          // Reset form
+          contactForm.reset();
+          inputs.forEach((input) => input.classList.remove('is-invalid'));
+          const packageDetailsSection = document.querySelector('#packageDetailsSection');
+          if (packageDetailsSection) packageDetailsSection.style.display = 'none';
+          
+          // Re-enable submit button
+          submitButton.disabled = false;
+          submitButton.textContent = originalButtonText;
+        })
+        .catch((error) => {
+          // Error handling
+          console.error('EmailJS Error Details:', error);
+          console.error('Error Status:', error.status);
+          console.error('Error Text:', error.text);
+          
+          const errorMessage = 'Sorry, there was an error sending your message. Please try again or contact us directly.';
+          
+          if (contactFeedback) {
+            contactFeedback.textContent = errorMessage;
+            contactFeedback.style.color = '#ff6b6b';
+          }
+
+          if (contactToast) {
+            contactToast.textContent = errorMessage;
+            contactToast.classList.add('show');
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+              contactToast.classList.remove('show');
+            }, 5000);
+          }
+
+          // Re-enable submit button
+          submitButton.disabled = false;
+          submitButton.textContent = originalButtonText;
+        });
+      } else {
+        // Fallback if EmailJS is not configured
+        console.warn('EmailJS is not configured. Please add your credentials in main.js');
+        
+        const fallbackMessage = 'Thank you for submitting the form. Our team will call you shortly.';
+        
+        if (contactFeedback) {
+          contactFeedback.textContent = fallbackMessage;
+          contactFeedback.style.color = 'var(--primary)';
+        }
+
+        if (contactToast) {
+          contactToast.textContent = fallbackMessage;
+          contactToast.classList.add('show');
+          if (toastTimer) clearTimeout(toastTimer);
+          toastTimer = setTimeout(() => {
+            contactToast.classList.remove('show');
+          }, 5000);
+        }
+
+        // Reset form
+        contactForm.reset();
+        inputs.forEach((input) => input.classList.remove('is-invalid'));
+        const packageDetailsSection = document.querySelector('#packageDetailsSection');
+        if (packageDetailsSection) packageDetailsSection.style.display = 'none';
+        
+        // Re-enable submit button
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
       }
     });
 
