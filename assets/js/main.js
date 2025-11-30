@@ -142,8 +142,8 @@ document.addEventListener('DOMContentLoaded', () => {
     email: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim()),
     phone: (value) => {
       const trimmed = value.trim();
-      // Phone is optional, but if provided, must be valid
-      if (!trimmed) return true;
+      // Phone is now mandatory
+      if (!trimmed) return false;
       
       // Remove all formatting characters (spaces, dashes, parentheses, plus, dots)
       const digitsOnly = trimmed.replace(/[\s\-\(\)\+\.]/g, '');
@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
           
           // Set custom validity for better browser validation
           if (!trimmed) {
-            phoneInput.setCustomValidity('');
+            phoneInput.setCustomValidity('Please enter a valid phone number (7-20 digits, with optional +, spaces, dashes, or parentheses).');
           } else {
             const digitsOnly = trimmed.replace(/[\s\-\(\)\+\.]/g, '');
             if (digitsOnly.length < 7) {
