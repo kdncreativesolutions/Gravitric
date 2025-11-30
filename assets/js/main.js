@@ -140,7 +140,33 @@ document.addEventListener('DOMContentLoaded', () => {
     fullName: (value) => value.trim().length >= 3,
     company: (value) => value.trim().length >= 2,
     email: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim()),
-    phone: (value) => !value.trim() || /^[0-9+\s-]{7,20}$/.test(value.trim()),
+    phone: (value) => {
+      const trimmed = value.trim();
+      // Phone is optional, but if provided, must be valid
+      if (!trimmed) return true;
+      
+      // Remove all formatting characters (spaces, dashes, parentheses, plus, dots)
+      const digitsOnly = trimmed.replace(/[\s\-\(\)\+\.]/g, '');
+      
+      // Must have 7-15 digits (international standard E.164)
+      if (digitsOnly.length < 7 || digitsOnly.length > 15) {
+        return false;
+      }
+      
+      // Check if it contains only valid phone characters (digits and common formatting)
+      // Allow: digits, +, spaces, dashes, parentheses, dots
+      const validPhonePattern = /^[\+]?[0-9\s\-\(\)\.]{7,20}$/;
+      if (!validPhonePattern.test(trimmed)) {
+        return false;
+      }
+      
+      // Ensure it contains at least some digits
+      if (!/[0-9]/.test(trimmed)) {
+        return false;
+      }
+      
+      return true;
+    },
     message: (value) => value.trim().length >= 10,
     package: (value) => value.trim().length > 0,
   };
@@ -194,9 +220,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
     contactForm.addEventListener('input', (event) => {
       if (event.target.matches('input, textarea, select')) {
-        validateField(event.target);
+        // Always validate the field first
+        const isValid = validateField(event.target);
+        
+        // Special handling for phone field - show validation in real-time
+        if (event.target.name === 'phone') {
+          const phoneInput = event.target;
+          const trimmed = phoneInput.value.trim();
+          
+          // Set custom validity for better browser validation
+          if (!trimmed) {
+            phoneInput.setCustomValidity('');
+          } else {
+            const digitsOnly = trimmed.replace(/[\s\-\(\)\+\.]/g, '');
+            if (digitsOnly.length < 7) {
+              phoneInput.setCustomValidity('Phone number must contain at least 7 digits.');
+            } else if (digitsOnly.length > 15) {
+              phoneInput.setCustomValidity('Phone number cannot exceed 15 digits.');
+            } else if (!/[0-9]/.test(trimmed)) {
+              phoneInput.setCustomValidity('Phone number must contain at least one digit.');
+            } else {
+              phoneInput.setCustomValidity('');
+            }
+          }
+        }
       }
     });
+    
+    // Also validate on blur for better UX
+    contactForm.addEventListener('blur', (event) => {
+      if (event.target.matches('input, textarea, select')) {
+        validateField(event.target);
+      }
+    }, true);
     
     contactForm.addEventListener('change', (event) => {
       if (event.target.matches('select')) {

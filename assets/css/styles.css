@@ -95,10 +95,26 @@ main > section.marquee {
   font-size: 1.25rem;
   color: #fff;
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  z-index: 1;
 }
 
 .brand-logo span {
   color: var(--primary);
+}
+
+.brand-logo .logo-img {
+  height: 3rem;
+  width: auto;
+  min-width: 120px;
+  max-width: 200px;
+  display: block;
+  object-fit: contain;
+  opacity: 1;
+  visibility: visible;
+  filter: brightness(1.2);
 }
 
 .main-nav a {
@@ -1122,6 +1138,12 @@ main > section.marquee {
   margin-bottom: 2rem;
 }
 
+.footer-brand .brand-logo .logo-img {
+  height: 2.5rem;
+  max-width: 180px;
+  filter: brightness(1.2);
+}
+
 .footer-brand p {
   color: var(--muted);
   margin-top: 0.75rem;
@@ -1405,6 +1427,18 @@ main > section.marquee {
 }
 
 @media (max-width: 768px) {
+  .brand-logo .logo-img {
+    height: 2.5rem;
+    max-width: 160px;
+    filter: brightness(1.2);
+  }
+
+  .footer-brand .brand-logo .logo-img {
+    height: 2.25rem;
+    max-width: 160px;
+    filter: brightness(1.2);
+  }
+
   .whatsapp-float {
     width: 55px;
     height: 55px;
@@ -1607,10 +1641,26 @@ body {
   font-size: 1.25rem;
   color: #fff;
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  z-index: 1;
 }
 
 .brand-logo span {
   color: #7dd3fc;
+}
+
+.brand-logo .logo-img {
+  height: 3rem;
+  width: auto;
+  min-width: 120px;
+  max-width: 200px;
+  display: block;
+  object-fit: contain;
+  opacity: 1;
+  visibility: visible;
+  filter: brightness(1.2);
 }
 
 .main-nav a {
@@ -1987,6 +2037,18 @@ body {
 }
 
 @media (max-width: 576px) {
+  .brand-logo .logo-img {
+    height: 2rem;
+    max-width: 140px;
+    filter: brightness(1.2);
+  }
+
+  .footer-brand .brand-logo .logo-img {
+    height: 2rem;
+    max-width: 140px;
+    filter: brightness(1.2);
+  }
+
   .glass-panel,
   .card-tile {
     border-radius: 20px;
