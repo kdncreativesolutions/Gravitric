@@ -479,16 +479,19 @@ main > section.marquee {
 .packages-section .package-card {
   border-radius: 32px;
   padding: 2.5rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(10, 15, 25, 0.6);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.1);
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.5rem;
   overflow: hidden;
   word-wrap: break-word;
   overflow-wrap: break-word;
   position: relative;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .package-tier {
@@ -496,6 +499,11 @@ main > section.marquee {
   letter-spacing: 0.25em;
   font-size: 0.85rem;
   color: var(--primary);
+  margin-bottom: 0;
+}
+
+.package-price {
+  margin-bottom: 0;
 }
 
 .package-price span {
@@ -577,11 +585,14 @@ main > section.marquee {
 }
 
 .package-summary {
-  color: var(--muted);
-  min-height: 60px;
+  color: rgba(255, 255, 255, 0.9);
+  min-height: auto;
   line-height: 1.6;
   word-wrap: break-word;
   overflow-wrap: break-word;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
 }
 
 .package-features {
@@ -589,7 +600,7 @@ main > section.marquee {
   padding-left: 0;
   margin: 0;
   display: grid;
-  gap: 0.5rem;
+  gap: 0.4rem;
   flex: 1;
 }
 
@@ -598,13 +609,14 @@ main > section.marquee {
   overflow-wrap: break-word;
   word-break: break-word;
   hyphens: auto;
-  line-height: 1.6;
+  line-height: 1.5;
   color: rgba(255, 255, 255, 0.85);
   font-size: 0.95rem;
   white-space: normal;
   padding-left: 1.2rem;
   position: relative;
   text-align: left;
+  margin-bottom: 0;
 }
 
 .package-features li::before {
@@ -617,9 +629,11 @@ main > section.marquee {
 }
 
 .package-featured {
-  background: linear-gradient(135deg, rgba(125, 211, 252, 0.15), rgba(192, 132, 252, 0.15));
+  background: rgba(10, 15, 25, 0.7);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   border-color: rgba(125, 211, 252, 0.4);
-  box-shadow: 0 30px 60px rgba(7, 19, 33, 0.35);
+  box-shadow: 0 30px 60px rgba(7, 19, 33, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   position: relative;
 }
 
@@ -1154,8 +1168,10 @@ main > section.marquee {
   position: relative;
   padding: 0.5rem 1.5rem;
   border-radius: 999px;
-  background: linear-gradient(120deg, rgba(192, 132, 252, 0.6), rgba(125, 211, 252, 0.6), rgba(103, 232, 249, 0.6));
-  border: 1.5px solid rgba(125, 211, 252, 0.5);
+  background: linear-gradient(120deg, rgba(192, 132, 252, 0.4), rgba(125, 211, 252, 0.4), rgba(103, 232, 249, 0.4));
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  border: 1.5px solid rgba(125, 211, 252, 0.3);
   color: #fff;
   font-weight: 600;
   letter-spacing: 0.05em;
@@ -1164,6 +1180,7 @@ main > section.marquee {
   overflow: hidden;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .btn-get-proposal::after {
@@ -1181,11 +1198,13 @@ main > section.marquee {
 }
 
 .btn-get-proposal:hover {
-  background: linear-gradient(120deg, rgba(192, 132, 252, 0.8), rgba(125, 211, 252, 0.8), rgba(103, 232, 249, 0.8));
-  border-color: rgba(125, 211, 252, 0.8);
+  background: linear-gradient(120deg, rgba(192, 132, 252, 0.5), rgba(125, 211, 252, 0.5), rgba(103, 232, 249, 0.5));
+  backdrop-filter: blur(12px) saturate(200%);
+  -webkit-backdrop-filter: blur(12px) saturate(200%);
+  border-color: rgba(125, 211, 252, 0.5);
   color: #fff;
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(125, 211, 252, 0.4), 0 0 20px rgba(192, 132, 252, 0.3);
+  box-shadow: 0 8px 24px rgba(125, 211, 252, 0.4), 0 0 20px rgba(192, 132, 252, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .btn-get-proposal:active {
@@ -1365,6 +1384,7 @@ main > section.marquee {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 1.5rem;
 }
 
 /* Laptop sizes (14" and 15.6") - 1366px to 1440px */
@@ -1409,6 +1429,10 @@ main > section.marquee {
   .about-pillars {
     gap: 1rem;
   }
+
+  .packages-section .package-select-btn {
+    margin-top: 1.25rem;
+  }
 }
 
 @media (max-width: 576px) {
@@ -1421,21 +1445,61 @@ main > section.marquee {
   .packages-section .package-card {
     padding: 1.5rem;
     border-radius: 24px;
+    gap: 1rem;
+  }
+
+  .package-features {
+    gap: 0.5rem;
   }
 
   .package-features li {
     font-size: 0.9rem;
-    line-height: 1.5;
+    line-height: 1.6;
+    margin-bottom: 0;
+    padding-left: 1.2rem;
+  }
+
+  .package-price {
+    margin-bottom: 0;
+  }
+
+  .package-summary {
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+    font-size: 0.95rem;
+  }
+
+  .package-tier {
+    margin-bottom: 0;
   }
 
   .package-price span {
     font-size: 2rem;
   }
 
+  .packages-section .package-select-btn {
+    margin-top: 1rem;
+    min-height: 44px;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.85rem;
+  }
+
+  .package-summary {
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .package-tier {
+    margin-bottom: 0.5rem;
+  }
+
   .hero {
     padding-top: 3rem;
   }
+}
 
+/* Extra small screens */
+@media (max-width: 400px) {
   .contact-highlights {
     justify-content: space-between;
   }
@@ -1989,5 +2053,10 @@ body {
   .about-stats .row > div {
     width: 100%;
   }
+}
+
+.py-5 {
+  padding-top: 3rem !important;
+  padding-bottom: 2rem !important;
 }
 
