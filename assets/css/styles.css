@@ -528,20 +528,38 @@ main > section.marquee {
 
 .price-selector select {
   max-width: 320px;
-  background-color: rgba(12, 15, 25, 0.75);
-  border-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(10, 15, 25, 0.7);
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
   color: #fff !important;
   font-weight: 600;
+  padding: 0.5rem 2.5rem 0.5rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.price-selector select:hover {
+  border-color: rgba(125, 211, 252, 0.3);
+  background-color: rgba(10, 15, 25, 0.8);
 }
 
 .price-selector select option {
-  color: #0f172a;
-  background-color: #fff;
+  color: #fff;
+  background-color: rgba(10, 15, 25, 0.95);
+  padding: 0.5rem;
+}
+
+.price-selector select option:hover,
+.price-selector select option:checked {
+  background-color: rgba(125, 211, 252, 0.2);
+  color: #fff;
 }
 
 .price-selector select:focus {
   border-color: var(--primary);
   box-shadow: 0 0 0 0.25rem rgba(103, 232, 249, 0.15);
+  background-color: rgba(10, 15, 25, 0.85);
 }
 
 .price-selector-note {
@@ -827,16 +845,26 @@ main > section.marquee {
 }
 
 .contact-form .form-control {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(10, 15, 25, 0.7);
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   color: #fff !important;
   border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.contact-form .form-control:hover {
+  border-color: rgba(125, 211, 252, 0.3);
+  background-color: rgba(10, 15, 25, 0.8);
 }
 
 .contact-form .form-select {
-  background: rgba(255, 255, 255, 0.05) url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%237dd3fc' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") no-repeat right 0.75rem center;
+  background: rgba(10, 15, 25, 0.7) url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%237dd3fc' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") no-repeat right 0.75rem center;
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
   background-size: auto, 18px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   color: #fff !important;
   border-radius: 16px;
   padding-right: 2.75rem;
@@ -844,12 +872,26 @@ main > section.marquee {
   -webkit-appearance: none;
   -moz-appearance: none;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.contact-form .form-select:hover {
+  border-color: rgba(125, 211, 252, 0.3);
+  background-color: rgba(10, 15, 25, 0.8);
 }
 
 .contact-form .form-select option {
-  background: #05070d;
+  background: rgba(10, 15, 25, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   color: #fff !important;
   padding: 0.5rem;
+}
+
+.contact-form .form-select option:hover,
+.contact-form .form-select option:checked {
+  background-color: rgba(125, 211, 252, 0.2);
+  color: #fff !important;
 }
 
 .contact-form .form-select:not(:focus) {
@@ -865,6 +907,7 @@ main > section.marquee {
   border-color: var(--primary);
   box-shadow: 0 0 0 0.2rem rgba(125, 211, 252, 0.25);
   color: #fff !important;
+  background-color: rgba(10, 15, 25, 0.85);
 }
 
 .contact-form .btn-primary {
