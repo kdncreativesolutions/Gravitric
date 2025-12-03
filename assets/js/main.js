@@ -438,9 +438,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Package base prices
   const packageBasePrices = {
-    'golden-package': 2500,
-    'premium-package': 5800,
-    'meta-ads-package': 10900
+    'golden-package': 680,
+    'premium-package': 1031.50,
+    'meta-ads-package': 480 
   };
 
   // Get formatted price based on selected currency
