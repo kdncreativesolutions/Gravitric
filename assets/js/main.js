@@ -132,11 +132,13 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   if (currencySelector && priceAmounts.length) {
-    // Load saved currency preference only if it exists
+    // Load saved currency preference or use the currently selected value in dropdown
     const savedCurrency = getCurrencyPreference();
-    if (savedCurrency && currencyConfig[savedCurrency]) {
-      currencySelector.value = savedCurrency;
-      updatePrices(savedCurrency);
+    const defaultCurrency = savedCurrency || currencySelector.value;
+    
+    if (defaultCurrency && currencyConfig[defaultCurrency]) {
+      currencySelector.value = defaultCurrency;
+      updatePrices(defaultCurrency);
     }
     
     currencySelector.addEventListener('change', (event) => {
