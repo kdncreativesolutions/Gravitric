@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /private/
 
-Sitemap: https://www.gravitrik-digital.com/sitemap.xml
+Sitemap: https://gravitric.com/sitemap.xml
