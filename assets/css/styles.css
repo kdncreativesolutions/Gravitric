@@ -1884,15 +1884,12 @@ body {
 }
 
 .brand-logo .logo-img {
-  height: 3.9rem;
-  width: auto;
-  min-width: 140px;
-  max-width: 220px;
-  display: block;
-  object-fit: contain;
-  opacity: 1;
-  visibility: visible;
-  filter: brightness(1.2);
+    height: 5rem;          /* Increase size */
+    max-width: 350px;      /* Allow larger scaling */
+    width: auto;
+    object-fit: contain;
+    filter: brightness(1.35); /* Slightly brighter for visibility */
+
 }
 
 .main-nav a {
