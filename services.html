@@ -86,6 +86,14 @@
           </select>
           <small class="price-selector-note">* Exchange values are approximate and refreshed periodically.</small>
         </div>
+        <div class="billing-period-selector mt-4">
+          <div class="billing-period-toggle" role="group" aria-label="Billing period selection">
+            <button type="button" class="billing-period-btn" data-period="1" aria-pressed="true">1 Month</button>
+            <button type="button" class="billing-period-btn" data-period="3" aria-pressed="false">3 Months</button>
+            <button type="button" class="billing-period-btn" data-period="6" aria-pressed="false">6 Months</button>
+            <button type="button" class="billing-period-btn" data-period="12" aria-pressed="false">1 Year</button>
+          </div>
+        </div>
       </section>
 
       <section class="packages-section mb-5">
@@ -94,8 +102,8 @@
             <article class="package-card">
               <p class="package-tier">Golden Package</p>
               <p class="package-price">
-                <span class="price-amount" data-base-price="683">$683</span>
-                <small>/ month</small>
+                <span class="price-amount" data-base-price="680" data-package-key="golden-package">$680</span>
+                <small class="billing-period-text">/ month</small>
               </p>
               <p class="package-summary">Perfect for new products validating channel-fit.</p>
               <ul class="package-features">
@@ -115,8 +123,8 @@
               <span class="package-badge">Best Choice</span>
               <p class="package-tier">Premium Package</p>
               <p class="package-price">
-                <span class="price-amount" data-base-price="1031.50">$1031.50</span>
-                <small>/ month</small>
+                <span class="price-amount" data-base-price="1031.50" data-package-key="premium-package">$1031.50</span>
+                <small class="billing-period-text">/ month</small>
               </p>
               <p class="package-summary">Our flagship pod for teams chasing predictable MQLs.</p>
               <ul class="package-features">
@@ -136,8 +144,8 @@
             <article class="package-card">
               <p class="package-tier">Meta Ads Package</p>
               <p class="package-price">
-                <span class="price-amount" data-base-price="480">$480</span>
-                <small>/ month</small>
+                <span class="price-amount" data-base-price="480" data-package-key="meta-ads-package">$480</span>
+                <small class="billing-period-text">/ month</small>
               </p>
               <p class="package-summary">Enterprise-grade pod for multi-market domination.</p>
               <ul class="package-features">

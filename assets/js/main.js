@@ -89,12 +89,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const currencySelector = document.querySelector('#currencySelector');
   const priceAmounts = document.querySelectorAll('.price-amount');
+  const billingPeriodTexts = document.querySelectorAll('.billing-period-text');
 
   const currencyConfig = {
     usa: { locale: 'en-US', currency: 'USD', rate: 1, round: 1 },
     india: { locale: 'en-IN', currency: 'INR', rate: 83.4, round: 100 },
     canada: { locale: 'en-CA', currency: 'CAD', rate: 1.36, round: 1 },
     australia: { locale: 'en-AU', currency: 'AUD', rate: 1.53, round: 1 },
+  };
+
+  // Billing period labels
+  const billingPeriodLabels = {
+    1: '/ month',
+    3: '/ 3 months',
+    6: '/ 6 months',
+    12: '/ year'
+  };
+
+  // Individual pricing for each package and billing period (USD base prices)
+  // You can manually set prices here for each package and billing period
+  const packagePricing = {
+    'golden-package': {
+      1: 600,    // 1 month price (USD)
+      3: 1798,   // 3 months price (USD) - set your price here
+      6: 3477,   // 6 months price (USD) - set your price here
+      12: 6595   // 1 year price (USD) - set your price here
+    },
+    'premium-package': {
+      1: 1031.50,  // 1 month price (USD)
+      3: 3118,     // 3 months price (USD) - set your price here
+      6: 5995,     // 6 months price (USD) - set your price here
+      12: 10672    // 1 year price (USD) - set your price here
+    },
+    'meta-ads-package': {
+      1: 480,    // 1 month price (USD)
+      3: 1350,   // 3 months price (USD) - set your price here
+      6: 2550,   // 6 months price (USD) - set your price here
+      12: 4800   // 1 year price (USD) - set your price here
+    }
   };
 
   const formatPrice = (value, { locale, currency, round }) => {
@@ -119,14 +151,48 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  const updatePrices = (region) => {
+  // Get or set billing period preference
+  const getBillingPeriodPreference = () => {
+    const saved = localStorage.getItem('selectedBillingPeriod');
+    return saved ? parseInt(saved, 10) : 1;
+  };
+
+  const setBillingPeriodPreference = (period) => {
+    if (period) {
+      localStorage.setItem('selectedBillingPeriod', period.toString());
+    } else {
+      localStorage.removeItem('selectedBillingPeriod');
+    }
+  };
+
+  const updatePrices = (region, billingPeriod = null) => {
     if (!region) return; // Don't update if no region selected
     const config = currencyConfig[region] || currencyConfig.usa;
+    const period = billingPeriod !== null ? billingPeriod : getBillingPeriodPreference();
+    const periodLabel = billingPeriodLabels[period] || '/ month';
+    
     priceAmounts.forEach((priceEl) => {
-      const base = Number(priceEl.dataset.basePrice) || 0;
-      const converted = base * config.rate;
+      // Get package key from data attribute
+      const packageKey = priceEl.dataset.packageKey;
+      
+      // Get individual price for this package and billing period
+      let price = 0;
+      if (packageKey && packagePricing[packageKey] && packagePricing[packageKey][period]) {
+        price = packagePricing[packageKey][period];
+      } else {
+        // Fallback to base price (1 month) if individual pricing not found
+        price = Number(priceEl.dataset.basePrice) || 0;
+      }
+      
+      const converted = price * config.rate;
       priceEl.textContent = formatPrice(converted, config);
     });
+
+    // Update billing period text
+    billingPeriodTexts.forEach((textEl) => {
+      textEl.textContent = periodLabel;
+    });
+
     // Save currency preference
     setCurrencyPreference(region);
   };
@@ -135,10 +201,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Load saved currency preference or use the currently selected value in dropdown
     const savedCurrency = getCurrencyPreference();
     const defaultCurrency = savedCurrency || currencySelector.value;
+    const savedBillingPeriod = getBillingPeriodPreference();
     
     if (defaultCurrency && currencyConfig[defaultCurrency]) {
       currencySelector.value = defaultCurrency;
-      updatePrices(defaultCurrency);
+      updatePrices(defaultCurrency, savedBillingPeriod);
     }
     
     currencySelector.addEventListener('change', (event) => {
@@ -153,6 +220,57 @@ document.addEventListener('DOMContentLoaded', () => {
           priceEl.textContent = formatPrice(base, currencyConfig.usa);
         });
       }
+    });
+  }
+
+  // Billing Period Toggle Handler
+  const billingPeriodButtons = document.querySelectorAll('.billing-period-btn');
+  if (billingPeriodButtons.length) {
+    // Load saved billing period preference
+    const savedBillingPeriod = getBillingPeriodPreference();
+    
+    // Set initial active state
+    billingPeriodButtons.forEach((btn) => {
+      const period = parseInt(btn.dataset.period, 10);
+      if (period === savedBillingPeriod) {
+        btn.setAttribute('aria-pressed', 'true');
+        btn.classList.add('active');
+      } else {
+        btn.setAttribute('aria-pressed', 'false');
+        btn.classList.remove('active');
+      }
+    });
+
+    // Update prices if billing period was saved
+    if (currencySelector && savedBillingPeriod !== 1) {
+      const currentCurrency = getCurrencyPreference() || currencySelector.value;
+      if (currentCurrency) {
+        updatePrices(currentCurrency, savedBillingPeriod);
+      }
+    }
+
+    // Add event listeners
+    billingPeriodButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const selectedPeriod = parseInt(btn.dataset.period, 10);
+        
+        // Update active states
+        billingPeriodButtons.forEach((b) => {
+          b.setAttribute('aria-pressed', 'false');
+          b.classList.remove('active');
+        });
+        btn.setAttribute('aria-pressed', 'true');
+        btn.classList.add('active');
+        
+        // Save preference
+        setBillingPeriodPreference(selectedPeriod);
+        
+        // Update prices
+        const currentCurrency = getCurrencyPreference() || (currencySelector ? currencySelector.value : 'usa');
+        if (currentCurrency) {
+          updatePrices(currentCurrency, selectedPeriod);
+        }
+      });
     });
   }
 
@@ -439,20 +557,33 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Package base prices
+  // Legacy base prices - kept for backward compatibility with services page data-base-price attributes
+  // These are the 1-month prices, but individual pricing is now used from packagePricing
   const packageBasePrices = {
     'golden-package': 680,
     'premium-package': 1031.50,
     'meta-ads-package': 480 
   };
 
-  // Get formatted price based on selected currency
-  const getFormattedPrice = (packageKey) => {
-    const basePrice = packageBasePrices[packageKey] || 0;
+  // Get formatted price based on selected currency and billing period (for contact page)
+  const getFormattedPrice = (packageKey, billingPeriod = null) => {
     const selectedCurrency = getCurrencyPreference();
     const config = currencyConfig[selectedCurrency] || currencyConfig.usa;
-    const converted = basePrice * config.rate;
+    const period = billingPeriod !== null ? billingPeriod : getBillingPeriodPreference();
+    const periodLabel = billingPeriodLabels[period] || '/ month';
+    
+    // Get individual price for this package and billing period
+    let price = 0;
+    if (packagePricing[packageKey] && packagePricing[packageKey][period]) {
+      price = packagePricing[packageKey][period];
+    } else if (packageBasePrices[packageKey]) {
+      // Fallback to base price (1 month) if individual pricing not found
+      price = packageBasePrices[packageKey];
+    }
+    
+    const converted = price * config.rate;
     const formatted = formatPrice(converted, config);
-    return `${formatted} / month`;
+    return `${formatted} ${periodLabel}`;
   };
 
   // Package data mapping
@@ -499,6 +630,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Function to display package details
   const displayPackageDetails = (packageKey) => {
     const packageDetailsSection = document.querySelector('#packageDetailsSection');
+    const billingPeriodSection = document.querySelector('#billingPeriodSection');
     const selectedPackageName = document.querySelector('#selectedPackageName');
     const selectedPackagePrice = document.querySelector('#selectedPackagePrice');
     const selectedPackageFeatures = document.querySelector('#selectedPackageFeatures');
@@ -506,19 +638,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!packageDetailsSection || !packageKey || !packageData[packageKey]) {
       if (packageDetailsSection) packageDetailsSection.style.display = 'none';
+      if (billingPeriodSection) billingPeriodSection.style.display = 'none';
       if (packageSelector) packageSelector.value = '';
       return;
     }
 
     const package = packageData[packageKey];
 
-    // Show package details section
+    // Show billing period section and package details section
+    if (billingPeriodSection) billingPeriodSection.style.display = 'block';
     packageDetailsSection.style.display = 'block';
     
-    // Populate package details with current currency
+    // Populate package details with current currency and billing period
     if (selectedPackageName) selectedPackageName.textContent = package.name;
     if (selectedPackagePrice) {
-      selectedPackagePrice.textContent = getFormattedPrice(packageKey);
+      const selectedBillingPeriod = getBillingPeriodPreference();
+      selectedPackagePrice.textContent = getFormattedPrice(packageKey, selectedBillingPeriod);
     }
     
     if (selectedPackageFeatures) {
@@ -538,8 +673,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // Auto-populate or update message field with package info
     const messageField = document.querySelector('#contactMessage');
     if (messageField) {
-      const formattedPrice = getFormattedPrice(packageKey);
-      const messageText = `I'm interested in the ${package.name} package (${formattedPrice}). Please provide more details.`;
+      const selectedBillingPeriod = getBillingPeriodPreference();
+      const formattedPrice = getFormattedPrice(packageKey, selectedBillingPeriod);
+      
+      // Get period label for message
+      const periodLabel = billingPeriodLabels[selectedBillingPeriod] || '/ month';
+      const periodText = selectedBillingPeriod === 1 ? 'monthly' : 
+                        selectedBillingPeriod === 3 ? '3-month' :
+                        selectedBillingPeriod === 6 ? '6-month' :
+                        selectedBillingPeriod === 12 ? 'yearly' : 'monthly';
+      
+      const messageText = `I'm interested in the ${package.name} package (${periodText} plan - ${formattedPrice}). Please provide more details.`;
       
       // If message is empty or contains package info, update it
       if (!messageField.value.trim() || messageField.value.includes('interested in the')) {
@@ -553,29 +697,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Update contact form dropdown prices based on currency
+  // Update contact form dropdown - just package names, no prices
   const updateContactFormPrices = () => {
     const packageSelector = document.querySelector('#packageSelector');
     if (!packageSelector) return;
 
-    const selectedCurrency = getCurrencyPreference();
-    const config = (selectedCurrency && currencyConfig[selectedCurrency]) ? currencyConfig[selectedCurrency] : currencyConfig.usa;
-
-    // Update dropdown option texts
+    // Just ensure package names are correct, no prices
     const options = packageSelector.querySelectorAll('option');
     options.forEach((option) => {
       const value = option.value;
-      if (value && packageBasePrices[value]) {
-        const basePrice = packageBasePrices[value];
-        const converted = basePrice * config.rate;
-        const formatted = formatPrice(converted, config);
-        const packageName = packageData[value]?.name || value;
-        option.textContent = `${packageName} - ${formatted}/month`;
+      if (value && packageData[value]) {
+        const packageName = packageData[value].name;
+        option.textContent = packageName;
       }
     });
   };
 
-  // Update contact form prices on page load
+  // Update contact form on page load
   updateContactFormPrices();
 
   // Listen for currency changes on contact page (if package selector exists, we're on contact page)
@@ -626,13 +764,58 @@ document.addEventListener('DOMContentLoaded', () => {
         displayPackageDetails(selectedValue);
       } else {
         const packageDetailsSection = document.querySelector('#packageDetailsSection');
+        const billingPeriodSection = document.querySelector('#billingPeriodSection');
         if (packageDetailsSection) packageDetailsSection.style.display = 'none';
+        if (billingPeriodSection) billingPeriodSection.style.display = 'none';
         const messageField = document.querySelector('#contactMessage');
         if (messageField && messageField.value.includes('interested in the')) {
           messageField.value = '';
         }
       }
     });
+
+    // Billing Period Toggle Handler for Contact Page
+    const billingPeriodSection = document.querySelector('#billingPeriodSection');
+    const contactBillingPeriodButtons = billingPeriodSection ? billingPeriodSection.querySelectorAll('.billing-period-btn') : [];
+    if (contactBillingPeriodButtons.length) {
+      // Load saved billing period preference
+      const savedBillingPeriod = getBillingPeriodPreference();
+      
+      // Set initial active state
+      contactBillingPeriodButtons.forEach((btn) => {
+        const period = parseInt(btn.dataset.period, 10);
+        if (period === savedBillingPeriod) {
+          btn.setAttribute('aria-pressed', 'true');
+          btn.classList.add('active');
+        } else {
+          btn.setAttribute('aria-pressed', 'false');
+          btn.classList.remove('active');
+        }
+      });
+
+      // Add event listeners
+      contactBillingPeriodButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const selectedPeriod = parseInt(btn.dataset.period, 10);
+          
+          // Update active states
+          contactBillingPeriodButtons.forEach((b) => {
+            b.setAttribute('aria-pressed', 'false');
+            b.classList.remove('active');
+          });
+          btn.setAttribute('aria-pressed', 'true');
+          btn.classList.add('active');
+          
+          // Save preference
+          setBillingPeriodPreference(selectedPeriod);
+          
+          // If a package is selected, refresh it to update price and message
+          if (packageSelector.value) {
+            displayPackageDetails(packageSelector.value);
+          }
+        });
+      });
+    }
   }
 
   // Listen for storage events to update prices when currency changes on another page
