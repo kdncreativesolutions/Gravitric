@@ -657,16 +657,57 @@ main > section.marquee {
   outline-offset: 2px;
 }
 
-@media (max-width: 576px) {
+@media (max-width: 768px) {
+  .billing-period-selector {
+    margin-top: 1rem;
+  }
+  
   .billing-period-toggle {
-    flex-wrap: wrap;
-    max-width: 90%;
-    justify-content: center;
+    width: 100%;
+    max-width: 100%;
+    padding: 0.2rem;
+    gap: 0.2rem;
   }
   
   .billing-period-btn {
-    padding: 0.45rem 1rem;
+    padding: 0.5rem 0.85rem;
     font-size: 0.8rem;
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 576px) {
+  .billing-period-selector {
+    margin-top: 0.75rem;
+  }
+  
+  .billing-period-toggle {
+    flex-wrap: nowrap;
+    width: 100%;
+    max-width: 100%;
+    padding: 0.2rem;
+    gap: 0.15rem;
+  }
+  
+  .billing-period-btn {
+    padding: 0.45rem 0.65rem;
+    font-size: 0.75rem;
+    flex: 1;
+    min-width: 0;
+    letter-spacing: 0.01em;
+  }
+}
+
+@media (max-width: 400px) {
+  .billing-period-btn {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.7rem;
+  }
+  
+  .billing-period-toggle {
+    gap: 0.1rem;
+    padding: 0.15rem;
   }
 }
 
