@@ -124,11 +124,22 @@
                 <label class="form-label text-uppercase small" for="packageSelector">Choose Package</label>
                 <select class="form-select" id="packageSelector" name="package" required>
                   <option value="">Select a package...</option>
-                  <option value="golden-package">Golden Package - $683/month</option>
-                  <option value="premium-package">Premium Package - $1031.50/month</option>
-                  <option value="meta-ads-package">Meta Ads Package - $480/month</option>
+                  <option value="golden-package">Golden Package</option>
+                  <option value="premium-package">Premium Package</option>
+                  <option value="meta-ads-package">Meta Ads Package</option>
                 </select>
                 <div class="invalid-feedback">Please select a package.</div>
+              </div>
+              <div class="col-12" id="billingPeriodSection" style="display: none;">
+                <label class="form-label text-uppercase small mb-3 d-block">Select Duration</label>
+                <div class="billing-period-selector">
+                  <div class="billing-period-toggle" role="group" aria-label="Billing period selection">
+                    <button type="button" class="billing-period-btn" data-period="1" aria-pressed="true">1 Month</button>
+                    <button type="button" class="billing-period-btn" data-period="3" aria-pressed="false">3 Months</button>
+                    <button type="button" class="billing-period-btn" data-period="6" aria-pressed="false">6 Months</button>
+                    <button type="button" class="billing-period-btn" data-period="12" aria-pressed="false">1 Year</button>
+                  </div>
+                </div>
               </div>
               <div class="col-12" id="packageDetailsSection" style="display: none;">
                 <div class="package-details-preview glass-panel mb-3" style="background: rgba(125, 211, 252, 0.1); border-color: rgba(125, 211, 252, 0.3);">
